@@ -1,7 +1,7 @@
 <?php
 
-define('GH_CLIENT_ID', '84da848c5bd1384144b2');
-define('GH_CLIENT_SECRET', '838477498f01c194ded579e5df9e929b68b4bbc1');
+define('GH_CLIENT_ID', '<YOUR CLIENT ID>');
+define('GH_CLIENT_SECRET', '<YOUR CLIENT SECRET>');
 
 require_once __DIR__. '/../library/autoload.php';
 
