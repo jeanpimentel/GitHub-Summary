@@ -1,0 +1,12 @@
+[submodule "library/symfony"]
+	path = library/symfony
+	url = https://github.com/symfony/symfony.git
+[submodule "library/silex"]
+	path = library/silex
+	url = https://github.com/fabpot/Silex.git
+[submodule "library/pimple"]
+	path = library/pimple
+	url = https://github.com/fabpot/Pimple.git
+[submodule "library/twig"]
+	path = library/twig
+	url = https://github.com/fabpot/Twig.git
