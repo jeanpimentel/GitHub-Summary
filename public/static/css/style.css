@@ -1,0 +1,35 @@
+.following {
+    width: 20%;
+    min-height: 75px;
+} 
+
+.following img {
+    width: 50px;
+}
+
+.actor {
+    padding-left: 8px;
+    line-height: 22px;
+    font-size: 14px;
+    height: 22px;
+    margin-top: 20px;
+}
+
+p.message {
+    margin: 0;
+    padding: 4px 10px;
+}
+
+.date {
+    text-align: center;
+}
+
+.event {
+    padding: 5px 0;
+    
+}
+
+.popover-inner {
+  width: 500px !important;
+}
+    

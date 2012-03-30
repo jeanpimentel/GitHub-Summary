@@ -1,0 +1,36 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+
+<h2>Events</h1>
+<hr />
+
+{% if events %}
+    <ul class="unstyled">
+    {% for actor, group in events %}
+        <li>
+            <div class="actor label label-inverse">{{ actor }}</div>
+            <ul class="unstyled">
+                {% for event in group %}
+                    <li>
+                        <div class="row event">
+                            <div class="span8"><p class="message"><i class="icon-chevron-right"></i> {{ event.message|raw }}</p></div>
+                            <div class="span2">
+                                {% if event.extra %}
+                                    <span class="btn btn-mini btn-info more-info" rel="popover" title="Info" data-content="<pre>{{ event.extra|escape }}</pre>">more info</span>
+                                {% endif %}
+                                &nbsp;
+                            </div>
+                            <div class="span2 date">{{ event.created_at|date('Y-m-d H:i:s')}}</div>
+                        </div>
+                                                    
+                        <small> </small>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% endblock %}

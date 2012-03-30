@@ -1,0 +1,35 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="span8">
+        <h2>Your Watched Repos</h1>
+        <hr />
+        {% if repositories %}
+        <dl>
+            {% for repository in repositories %}
+            <dt><a href="{{ repository.url }}">{{ repository.name }}</a></dt>
+            <dd><p>{{ repository.description }}</p></dd>
+            {% endfor %}
+        </dl>
+        {% endif %}
+    </div>
+    <div class="span4">
+        <h2>You're Following</h1>
+        <hr />
+        {% if followingUsers %}
+        <ul class="unstyled span4">
+            {% for user in followingUsers %}
+                <li class="following pull-left">
+                    <a href="{{ user.url }}" class="user" rel="tooltip" title="{% if user.name %}{{ user.name }}{% else %}{{ user.login }}{% endif %}">
+                        <img src="{{ user.avatar }}" class="thumbnail"/>
+                    </a>                    
+                </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
