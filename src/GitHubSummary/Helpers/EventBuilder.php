@@ -36,7 +36,15 @@ class EventBuilder
         );
     }
 
-    //    DeleteEvent
+    static public function buildDeleteEvent($event)
+    {
+        return array(
+            'actor' => $event->repo->name,
+            'message' => sprintf('<a href="https://github.com/%s">%s</a> deleted %s %s', $event->actor->login, $event->actor->login, $event->payload->ref_type, $event->payload->ref),
+            'extra' => NULL
+        );
+    }
+    
     //    DownloadEvent
 
     static public function buildFollowEvent($event)
