@@ -5,14 +5,29 @@ namespace GitHubSummary\Helpers;
 class Cache
 {
 
+    /**
+     * @var string $path
+     */
     private $path;
 
-    function __construct($path = NULL)
+    /**
+     * Constructor
+     *
+     * @param $path
+     *
+     * @throws \LogicException
+     */
+    public function __construct($path)
     {
-        if (is_null($path))
-            $this->path = __DIR__ . '/../Resources/Cache';
-        else
-            $this->path = $path;
+        if (file_exists($path) == false) {
+            throw new \LogicException('You must configure a folder that exists for the cache.');
+        }
+
+        if (is_writable($path) == false) {
+            throw new \LogicException('You must configure a folder that is writable by the server.');
+        }
+
+        $this->path = $path;
     }
 
     public function set($key, $value)

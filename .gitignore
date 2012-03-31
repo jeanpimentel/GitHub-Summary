@@ -1,3 +1,4 @@
 composer.phar
 vendor
 src/GitHubSummary/Resources/Cache/*
+config.yml

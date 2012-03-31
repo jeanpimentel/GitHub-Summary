@@ -12,10 +12,10 @@ class GitHub
     private $accessToken;
     private $cache;
 
-    function __construct($accessToken = NULL, \Cache $cache = NULL)
+    function __construct(Cache $cache, $accessToken = NULL)
     {
-        $this->accessToken = $accessToken;
-        $this->cache = is_null($cache) ? new Cache() : $cache;
+        $this->cache        = $cache;
+        $this->accessToken  = $accessToken;
     }
 
     public function getAuthorizeUrl($clientId)
