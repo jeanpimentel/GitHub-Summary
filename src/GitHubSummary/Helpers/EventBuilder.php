@@ -60,7 +60,14 @@ class EventBuilder
         );
     }
 
-    //    GollumEvent
+    static public function buildGollumEvent($event)
+    {
+        return array(
+            'actor' => $event->repo->name,
+            'message' => sprintf('<a href="https://github.com/%s">%s</a> %s wiki page: <a href="%s">%s</a>', $event->actor->login, $event->actor->login, $event->payload->pages[0]->action, $event->payload->pages[0]->html_url, $event->payload->pages[0]->page_name),
+            'extra' => NULL
+        );
+    }
 
     static public function buildIssueCommentEvent($event)
     {
