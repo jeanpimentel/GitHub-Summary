@@ -1,11 +1,4 @@
-# Netbeans
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-nbactions.xml
-nb-configuration.xml
-
-# Cache
+composer.phar
+vendor
 src/GitHubSummary/Resources/Cache/*
+config.yml

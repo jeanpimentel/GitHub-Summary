@@ -1,0 +1,17 @@
+{
+
+    "name" : "jeanpimentel/GitHub-Summary",
+
+    "autoload": {
+        "psr-0": { "GitHubSummary": "src/" }
+    },
+
+    "require": {
+        "php":              ">=5.3.2",
+        "symfony/symfony":  "*",
+        "silex/silex":      "*",
+        "pimple/pimple":    "*",
+        "twig/extensions":  "*"
+    }
+
+}

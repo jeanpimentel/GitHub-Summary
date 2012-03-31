@@ -1,0 +1,16 @@
+# -----------------------------------------------------------------------------
+#
+# Github-Summary configuration file
+#
+# -----------------------------------------------------------------------------
+
+# Environment config
+debug: true
+
+# Cache folder (must be writable by the webserver)
+# The path must be relative to the app root folder
+cache.dir: data/cache
+
+# Github access configuration
+github.client_id:      your_client_id
+github.client_secret:  your_client_secret
