@@ -1,5 +1,5 @@
-# GitHub Summary
-
+GitHub Summary
+==============
 
 The initial premise was:
 
@@ -10,8 +10,7 @@ Requirements
 ------------
   * PHP 5.3+
   * Silex
-  * Symfony 2
-  * Pimple
+  * Symfony/Yaml
   * Twig
 
 
@@ -21,7 +20,7 @@ To-Do
 
 
 License Information
-===================
+-------------------
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
