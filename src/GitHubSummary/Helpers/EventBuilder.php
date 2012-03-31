@@ -48,7 +48,15 @@ class EventBuilder
         );
     }
 
-    //    ForkEvent
+    static public function buildForkEvent($event)
+    {
+        return array(
+            'actor' => $event->actor->login,
+            'message' => sprintf('forked <a href="https://github.com/%s">%s</a>', $event->repo->name, $event->repo->name),
+            'extra' => NULL
+        );
+    }
+        
     //    ForkApplyEvent
 
     static public function buildGistEvent($event)
