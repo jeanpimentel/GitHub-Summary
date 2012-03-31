@@ -1,0 +1,35 @@
+{
+    "hash": "2572422bc0ccd52788c0d093e2184419",
+    "packages": [
+        {
+            "package": "doctrine/common",
+            "version": "2.2.1"
+        },
+        {
+            "package": "pimple/pimple",
+            "version": "dev-master",
+            "source-reference": "321db91e49b6cf8cbeed58d8db662d40de96d2c3"
+        },
+        {
+            "package": "silex/silex",
+            "version": "dev-master",
+            "source-reference": "183743a576d60e6a20777ba743d54ff2a6d5be9d"
+        },
+        {
+            "package": "symfony/symfony",
+            "version": "dev-master",
+            "source-reference": "0c7b2911bc8a7998551e26296883cb2834b8499c",
+            "alias": "2.1.9999999.9999999-dev"
+        },
+        {
+            "package": "twig/extensions",
+            "version": "dev-master",
+            "source-reference": "1dfff8e793f50f651c4f74f796c2c68a4aee3147"
+        },
+        {
+            "package": "twig/twig",
+            "version": "1.6.3"
+        }
+    ],
+    "aliases": []
+}
