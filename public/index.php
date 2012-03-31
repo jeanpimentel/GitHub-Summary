@@ -2,8 +2,19 @@
 
 define('GH_CLIENT_ID', '<YOUR CLIENT ID>');
 define('GH_CLIENT_SECRET', '<YOUR CLIENT SECRET>');
+// Define o arquivo de autoload
+define('COMPOSER_AUTOLOAD', __DIR__.'/../vendor/.composer/autoload.php');
 
-require_once __DIR__. '/../library/autoload.php';
+// Verifica se o arquivo existe
+if (file_exists(COMPOSER_AUTOLOAD) == false) {
+
+    echo 'You must setup the dependencies for the project using Composer.';
+    exit;
+
+}
+
+// Inclui o arquivo de autoload
+require_once COMPOSER_AUTOLOAD;
 
 /**
  * Init

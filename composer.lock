@@ -1,0 +1,29 @@
+{
+    "hash": "107fd06522334fa79e92fa8fbdf5f66a",
+    "packages": [
+        {
+            "package": "pimple/pimple",
+            "version": "dev-master",
+            "source-reference": "321db91e49b6cf8cbeed58d8db662d40de96d2c3"
+        },
+        {
+            "package": "silex/silex",
+            "version": "dev-master",
+            "source-reference": "183743a576d60e6a20777ba743d54ff2a6d5be9d"
+        },
+        {
+            "package": "symfony/symfony",
+            "version": "2.0.6"
+        },
+        {
+            "package": "twig/extensions",
+            "version": "dev-master",
+            "source-reference": "1dfff8e793f50f651c4f74f796c2c68a4aee3147"
+        },
+        {
+            "package": "twig/twig",
+            "version": "1.6.3"
+        }
+    ],
+    "aliases": []
+}
