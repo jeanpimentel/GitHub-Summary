@@ -8,10 +8,10 @@
 
     "require": {
         "php":              ">=5.3.2",
-        "symfony/symfony":  "*",
         "silex/silex":      "*",
         "pimple/pimple":    "*",
-        "twig/extensions":  "*"
+        "twig/extensions":  "*",
+        "symfony/yaml":  "*"
     }
 
 }
