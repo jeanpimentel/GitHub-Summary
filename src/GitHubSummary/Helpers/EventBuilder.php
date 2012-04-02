@@ -135,10 +135,15 @@ class EventBuilder
 
     static public function buildPushEvent($event)
     {
+        $messages = '';
+        foreach($event->payload->commits as $commit) 
+            $messages .= sprintf('<li>%s</li>', $commit->message);
+        
         return array(
             'actor' => $event->repo->name,
-            'message' => sprintf('<a href="https://github.com/%s">%s</a> pushed to <a href="https://github.com/%s">%s</a>', $event->actor->login, $event->actor->login, $event->repo->name, $event->repo->name),
-            'extra' => current($event->payload->commits)->message
+            'message' => sprintf('<a href="https://github.com/%s">%s</a> pushed to %s <a href="https://github.com/%s">%s</a>', $event->actor->login, $event->actor->login, 
+                    end(explode('/',$event->payload->ref)), $event->repo->name, $event->repo->name),
+            'extra' => sprintf('<ul>%s</ul>', $messages)
         );
     }
 
