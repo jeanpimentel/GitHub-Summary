@@ -29,11 +29,18 @@ class EventBuilder
 
     static public function buildCreateEvent($event)
     {
-        return array(
-            'actor' => $event->actor->login,
-            'message' => sprintf('created repository <a href="https://github.com/%s">%s</a>', $event->repo->name, $event->repo->name),
-            'extra' => $event->payload->description
-        );
+        if(empty($event->payload->ref)) 
+            return array(
+                'actor' => $event->actor->login,
+                'message' => sprintf('created %s <a href="https://github.com/%s">%s</a>', $event->payload->ref_type, $event->repo->name, $event->repo->name),
+                'extra' => $event->payload->description
+            );        
+        else
+            return array(
+                'actor' => $event->repo->name,
+                'message' => sprintf('<a href="https://github.com/%s">%s</a> created %s <a href="https://github.com/%s/tree/%s">%s</a>', $event->actor->login, $event->actor->login, $event->payload->ref_type, $event->repo->name, $event->payload->ref, $event->payload->ref),
+                'extra' => $event->payload->description
+            );
     }
 
     static public function buildDeleteEvent($event)
