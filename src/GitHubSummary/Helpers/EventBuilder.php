@@ -96,7 +96,7 @@ class EventBuilder
     {
         return array(
             'actor' => $event->repo->name,
-            'message' => sprintf('<a href="https://github.com/%s">%s</a> commented on <a href="%s">%s</a>', $event->actor->login, $event->actor->login, $event->payload->issue->html_url, $event->payload->issue->title),
+            'message' => sprintf('<a href="https://github.com/%s">%s</a> commented on issue <a href="%s">%s</a>', $event->actor->login, $event->actor->login, $event->payload->issue->html_url, $event->payload->issue->title),
             'extra' => $event->payload->comment->body
         );
     }
@@ -105,7 +105,7 @@ class EventBuilder
     {
         return array(
             'actor' => $event->repo->name,
-            'message' => sprintf('<a href="https://github.com/%s">%s</a> %s <a href="%s">%s</a>', $event->actor->login, $event->actor->login, $event->payload->action, $event->payload->issue->html_url, $event->payload->issue->title),
+            'message' => sprintf('<a href="https://github.com/%s">%s</a> %s issue <a href="%s">%s</a>', $event->actor->login, $event->actor->login, $event->payload->action, $event->payload->issue->html_url, $event->payload->issue->title),
             'extra' => NULL
         );
     }
@@ -130,8 +130,14 @@ class EventBuilder
         );
     }
 
-    //    PullRequestReviewCommentEvent
-
+    static public function buildPullRequestReviewCommentEvent($event)
+    {
+        return array(
+            'actor' => $event->repo->name,
+            'message' => sprintf('<a href="https://github.com/%s">%s</a> commented on pull request <a href="https://github.com/%s/pulls">%s</a>', $event->actor->login, $event->actor->login, $event->repo->name, $event->payload->comment->path),
+            'extra' => $event->payload->comment->body
+        );
+    }
 
     static public function buildPushEvent($event)
     {
