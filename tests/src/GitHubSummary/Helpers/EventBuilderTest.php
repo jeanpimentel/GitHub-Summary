@@ -206,7 +206,28 @@ class EventBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildPullRequestEvent()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $event = json_decode('{
+            "payload":{
+                "pull_request":{
+                    "title":"my pull title",
+                    "html_url":"https:\/\/github.com\/user\/repo\/pull\/123456"
+                }
+            },
+            "repo":{
+                "name":"user\/repo"
+            },
+            "actor":{
+                "login":"actor"
+            }
+        }');
+
+        $expected = array(
+            'actor' => 'user/repo',
+            'message' => '<a href="https://github.com/user/repo/pull/123456">pull request</a> from <a href="https://github.com/actor">actor</a>',
+            'extra' => 'my pull title'
+        );
+
+        $this->assertEquals($expected, EventBuilder::BuildPullRequestEvent($event));
     }
 
     public function testBuildPullRequestReviewCommentEvent()
