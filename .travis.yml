@@ -4,6 +4,7 @@ php:
     - 5.4 
 
 before_script:
+    - mkdir -p data/cache && chmod 0755 data/cache
     - curl -s http://getcomposer.org/installer | php
     - php composer.phar install
  
