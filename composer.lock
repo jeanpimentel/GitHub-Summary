@@ -1,15 +1,25 @@
 {
-    "hash": "3f63f7ba8c521b2645e4937f61998445",
+    "hash": "d15b5c12b70ab70b6b02e1a469839ffa",
     "packages": [
+        {
+            "package": "Respect/Data",
+            "version": "dev-master",
+            "source-reference": "e72f7085f132282ed93c845689956d0ad1377f72"
+        },
+        {
+            "package": "Respect/Relational",
+            "version": "dev-develop",
+            "source-reference": "7064aedc0d465a289eadacedb834563df6638a8b"
+        },
         {
             "package": "pimple/pimple",
             "version": "dev-master",
-            "source-reference": "321db91e49b6cf8cbeed58d8db662d40de96d2c3"
+            "source-reference": "a687126f3d49c576eb33568d57e4d46a35c45cb2"
         },
         {
             "package": "silex/silex",
             "version": "dev-master",
-            "source-reference": "183743a576d60e6a20777ba743d54ff2a6d5be9d"
+            "source-reference": "c3fd34646a91279b7da716746a7cc9db93da8202"
         },
         {
             "package": "symfony/browser-kit",
@@ -83,7 +93,7 @@
         },
         {
             "package": "twig/twig",
-            "version": "1.6.3"
+            "version": "1.6.4"
         }
     ],
     "aliases": []
