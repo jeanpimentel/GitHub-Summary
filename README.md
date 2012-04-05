@@ -1,4 +1,4 @@
-GitHub Summary
+GitHub Summary [![Build Status](https://secure.travis-ci.org/jeanpimentel/GitHub-Summary.png)](http://travis-ci.org/jeanpimentel/GitHub-Summary)
 ==============
 
 The initial premise was:
