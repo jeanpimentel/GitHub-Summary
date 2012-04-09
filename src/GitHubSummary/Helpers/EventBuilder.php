@@ -13,9 +13,13 @@ class EventBuilder
         $response = array('created_at' => \DateTime::createFromFormat(DateTime::ISO8601, $event->created_at)->format('U'));
 
         if (method_exists(__CLASS__, $method))
-            return $response + call_user_func(array(__CLASS__, $method), $event);
+            $result = $response + call_user_func(array(__CLASS__, $method), $event);
+        else
+            $result = $response + self::buildNotImplementYet($event);
 
-        return $response + self::buildNotImplementYet($event);
+        $result['id'] = md5(serialize($result));
+        $result['type'] = (strpos($result['actor'], '/') === FALSE) ? 'u' : 'r';
+        return $result;
     }
 
     static public function buildCommitCommentEvent($event)
@@ -29,12 +33,12 @@ class EventBuilder
 
     static public function buildCreateEvent($event)
     {
-        if(empty($event->payload->ref)) 
+        if(empty($event->payload->ref))
             return array(
                 'actor' => $event->actor->login,
                 'message' => sprintf('created %s <a href="https://github.com/%s">%s</a>', $event->payload->ref_type, $event->repo->name, $event->repo->name),
                 'extra' => $event->payload->description
-            );        
+            );
         else
             return array(
                 'actor' => $event->repo->name,
@@ -51,7 +55,7 @@ class EventBuilder
             'extra' => NULL
         );
     }
-    
+
     //    DownloadEvent
 
     static public function buildFollowEvent($event)
@@ -71,7 +75,7 @@ class EventBuilder
             'extra' => NULL
         );
     }
-        
+
     //    ForkApplyEvent
 
     static public function buildGistEvent($event)
@@ -142,12 +146,12 @@ class EventBuilder
     static public function buildPushEvent($event)
     {
         $messages = '';
-        foreach($event->payload->commits as $commit) 
+        foreach($event->payload->commits as $commit)
             $messages .= sprintf('<li>%s</li>', $commit->message);
-        
+
         return array(
             'actor' => $event->repo->name,
-            'message' => sprintf('<a href="https://github.com/%s">%s</a> pushed to %s <a href="https://github.com/%s">%s</a>', $event->actor->login, $event->actor->login, 
+            'message' => sprintf('<a href="https://github.com/%s">%s</a> pushed to %s <a href="https://github.com/%s">%s</a>', $event->actor->login, $event->actor->login,
                     end(explode('/',$event->payload->ref)), $event->repo->name, $event->repo->name),
             'extra' => sprintf('<ul>%s</ul>', $messages)
         );
