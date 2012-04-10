@@ -57,11 +57,11 @@ foreach ($configurations as $configKey => $configValue) {
 $app->before(function ($request) use($app) {
     // Starts the session
     $request->getSession()->start();
-    // Create an instance of the cache helper
-    $cache = new GitHubSummary\Helpers\Cache($app['cache.dir']);
+
     // Declare the github's service
     $app['github'] = new GitHubSummary\Services\GitHub(
-        $cache,
+        new GitHubSummary\Helpers\Cache($app['cache.dir']),
+        new Respect\Relational\Mapper(new PDO('sqlite:../db.sqlite')),
         $app['session']->get('access_token')
     );
 });
@@ -131,6 +131,14 @@ $app->get('/events', function() use($app)
     ));
 })
 ->bind('events')
+->middleware($mustBeLogged);
+
+$app->get('/cron', function() use($app)
+{
+    $user = $app['session']->get('user');
+    $app['github']->update($user['login']);
+})
+->bind('cron')
 ->middleware($mustBeLogged);
 
 

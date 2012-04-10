@@ -5,17 +5,20 @@ namespace GitHubSummary\Services;
 use GitHubSummary\Helpers\Cache;
 use GitHubSummary\Helpers\EventBuilder;
 use \DateTime;
+use Respect\Relational\Mapper;
 
 class GitHub
 {
 
-    private $accessToken;
     private $cache;
+    private $mapper;
+    private $accessToken;
 
-    function __construct(Cache $cache, $accessToken = NULL)
+    function __construct(Cache $cache, Mapper $mapper, $accessToken = NULL)
     {
-        $this->cache        = $cache;
-        $this->accessToken  = $accessToken;
+        $this->cache = $cache;
+        $this->mapper = $mapper;
+        $this->accessToken = $accessToken;
     }
 
     public function getAuthorizeUrl($clientId)
@@ -46,38 +49,12 @@ class GitHub
 
     public function getWatchedRepositories()
     {
-        if ($this->cache->has('watched' . $this->accessToken))
-            return json_decode($this->cache->get('watched' . $this->accessToken));
-
-        $response = $this->request('https://api.github.com/user/watched');
-
-        $data = array();
-        foreach (json_decode($response) as $repository)
-            $data[] = array(
-                'id' => $repository->id,
-                'name' => $repository->owner->login . '/' . $repository->name,
-                'description' => $repository->description,
-                'url' => $repository->html_url,
-                'updated_at' => \DateTime::createFromFormat(DateTime::ISO8601, $repository->updated_at)->format('U'),
-            );
-
-        $this->cache->set('watched' . $this->accessToken, json_encode($data));
-        return $data;
+        return $this->mapper->repository->fetchAll(new \Respect\Relational\Sql('ORDER BY updated_at DESC'));
     }
 
     public function getFollowingUsers()
     {
-        if ($this->cache->has('following' . $this->accessToken))
-            return json_decode($this->cache->get('following' . $this->accessToken));
-
-        $response = $this->request('https://api.github.com/user/following');
-
-        $data = array();
-        foreach (json_decode($response) as $user)
-            $data[] = $this->getUser($user->login);
-
-        $this->cache->set('following' . $this->accessToken, json_encode($data));
-        return $data;
+        return $this->mapper->user->fetchAll(new \Respect\Relational\Sql('ORDER BY LOWER(login) ASC'));
     }
 
     public function getUser($login = NULL)
@@ -147,6 +124,67 @@ class GitHub
         }
 
         return curl_exec($curl);
+    }
+
+    private function updateFollowingUsers()
+    {
+        $dt = new \DateTime();
+        $timestamp = $dt->format('U');
+
+        $response = $this->request('https://api.github.com/user/following');
+        foreach (json_decode($response) as $user)
+        {
+
+            $user = $this->simplifyObject($this->getUser($user->login), array('id', 'login', 'avatar', 'name'));
+            $user->cron_at = $timestamp;
+
+            if ($this->mapper->user[$user->id]->fetch())
+                $this->mapper->markTracked($user, 'user', $user->id);
+
+            $this->mapper->user->persist($user);
+        }
+        $this->mapper->flush();
+    }
+
+    private function updateWatchedRepositories()
+    {
+        $dt = new \DateTime();
+        $timestamp = $dt->format('U');
+
+        $response = $this->request('https://api.github.com/user/watched');
+        foreach (json_decode($response) as $repository)
+        {
+
+            $repository = (object) array(
+                'id' => $repository->id,
+                'name' => $repository->owner->login . '/' . $repository->name,
+                'description' => $repository->description,
+                'url' => $repository->html_url,
+                'updated_at' => \DateTime::createFromFormat(DateTime::ISO8601, $repository->updated_at)->format('U'),
+                'cron_at' => $timestamp
+            );
+
+            if ($this->mapper->repository[$repository->id]->fetch())
+                $this->mapper->markTracked($repository, 'repository', $repository->id);
+
+            $this->mapper->repository->persist($repository);
+        }
+        $this->mapper->flush();
+    }
+
+    public function update($login)
+    {
+//        $this->updateFollowingUsers();
+//        $this->updateWatchedRepositories();
+    }
+
+    private function simplifyObject($object, $fieldsToPersist)
+    {
+        foreach (array_keys(get_object_vars($object)) as $key)
+            if (!in_array($key, $fieldsToPersist))
+                unset($object->{$key});
+
+        return $object;
     }
 
 }
