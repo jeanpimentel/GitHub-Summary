@@ -6,6 +6,7 @@ use GitHubSummary\Helpers\Cache;
 use GitHubSummary\Helpers\EventBuilder;
 use \DateTime;
 use Respect\Relational\Mapper;
+use Respect\Relational\Sql;
 
 class GitHub
 {
@@ -49,12 +50,12 @@ class GitHub
 
     public function getWatchedRepositories()
     {
-        return $this->mapper->repository->fetchAll(new \Respect\Relational\Sql('ORDER BY updated_at DESC'));
+        return $this->mapper->repository->fetchAll(Sql::orderBy('updated_at DESC'));
     }
 
     public function getFollowingUsers()
     {
-        return $this->mapper->user->fetchAll(new \Respect\Relational\Sql('ORDER BY LOWER(login) ASC'));
+        return $this->mapper->user->fetchAll(Sql::orderBy('LOWER(login) ASC'));
     }
 
     public function getUser($login = NULL)
@@ -83,25 +84,17 @@ class GitHub
 
     public function getEvents($login)
     {
-        if ($this->cache->has('events' . $this->accessToken))
-            return json_decode($this->cache->get('events' . $this->accessToken));
-
-        $response = array();
-        for ($i = 1; $i <= 3; $i++)
-            $response = array_merge($response, json_decode($this->request('https://api.github.com/users/' . $login . '/received_events', 'GET', array('page' => $i))));
-
+        $results = $this->mapper->event->fetchAll(Sql::orderBy('created_at DESC'));
+        
         $data = array();
-        foreach ($response as $event)
+        foreach ($results as $result)
         {
-            $event = (object) EventBuilder::build($event);
+            if (!isset($data[$result->actor]))
+                $data[$result->actor] = array();
 
-            if (!isset($data[$event->actor]))
-                $data[$event->actor] = array();
-
-            $data[$event->actor][] = $event;
+            $data[$result->actor][] = $result;
         }
 
-        $this->cache->set('events' . $this->accessToken, json_encode($data));
         return $data;
     }
 
@@ -156,12 +149,12 @@ class GitHub
         {
 
             $repository = (object) array(
-                'id' => $repository->id,
-                'name' => $repository->owner->login . '/' . $repository->name,
-                'description' => $repository->description,
-                'url' => $repository->html_url,
-                'updated_at' => \DateTime::createFromFormat(DateTime::ISO8601, $repository->updated_at)->format('U'),
-                'cron_at' => $timestamp
+                        'id' => $repository->id,
+                        'name' => $repository->owner->login . '/' . $repository->name,
+                        'description' => $repository->description,
+                        'url' => $repository->html_url,
+                        'updated_at' => \DateTime::createFromFormat(DateTime::ISO8601, $repository->updated_at)->format('U'),
+                        'cron_at' => $timestamp
             );
 
             if ($this->mapper->repository[$repository->id]->fetch())
@@ -172,10 +165,29 @@ class GitHub
         $this->mapper->flush();
     }
 
+    private function updateEvents($login)
+    {
+        $response = array();
+        for ($i = 1; $i <= 8; $i++)
+            $response = array_merge($response, json_decode($this->request('https://api.github.com/users/' . $login . '/received_events', 'GET', array('page' => $i))));
+        
+        foreach ($response as $event)
+        {            
+            $event = (object) EventBuilder::build($event);
+            
+            if ($this->mapper->event[$event->id]->fetch())
+                $this->mapper->markTracked($event, 'event', $event->id);
+
+            $this->mapper->event->persist($event);
+        }
+        $this->mapper->flush();
+    }
+
     public function update($login)
     {
-//        $this->updateFollowingUsers();
-//        $this->updateWatchedRepositories();
+        $this->updateFollowingUsers();
+        $this->updateWatchedRepositories();
+        $this->updateEvents($login);
     }
 
     private function simplifyObject($object, $fieldsToPersist)
