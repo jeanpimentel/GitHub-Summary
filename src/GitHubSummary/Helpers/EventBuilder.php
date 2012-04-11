@@ -18,7 +18,6 @@ class EventBuilder
             $result = $response + self::buildNotImplementYet($event);
 
         $result['id'] = md5(serialize($result));
-        $result['type'] = (strpos($result['actor'], '/') === FALSE) ? 'u' : 'r';
         return $result;
     }
 
