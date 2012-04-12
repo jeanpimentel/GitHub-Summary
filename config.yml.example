@@ -12,5 +12,8 @@ debug: true
 cache.dir: data/cache
 
 # Github access configuration
-github.client_id:      your_client_id
-github.client_secret:  your_client_secret
+github.client_id: your_client_id
+github.client_secret: your_client_secret
+
+# Database dsn
+database.dsn: your_database_dsn
