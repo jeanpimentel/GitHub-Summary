@@ -82,10 +82,20 @@ class GitHub
         return $data;
     }
 
-    public function getEvents($login)
+    public function getUsersEvents()
     {
-        $results = $this->mapper->event->fetchAll(Sql::orderBy('created_at DESC'));
-        
+        $results = $this->mapper->event_user->fetchAll();
+        return ($results) ? $this->groupEvents($results) : false;
+    }
+    
+    public function getRepositoriesEvents()
+    {
+        $results = $this->mapper->event_repository->fetchAll();
+        return ($results) ? $this->groupEvents($results) : false;
+    }
+
+    protected function groupEvents(array $results)
+    {
         $data = array();
         foreach ($results as $result)
         {
@@ -170,11 +180,11 @@ class GitHub
         $response = array();
         for ($i = 1; $i <= 8; $i++)
             $response = array_merge($response, json_decode($this->request('https://api.github.com/users/' . $login . '/received_events', 'GET', array('page' => $i))));
-        
+
         foreach ($response as $event)
-        {            
+        {
             $event = (object) EventBuilder::build($event);
-            
+
             if ($this->mapper->event[$event->id]->fetch())
                 $this->mapper->markTracked($event, 'event', $event->id);
 

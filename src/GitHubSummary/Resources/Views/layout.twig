@@ -39,10 +39,12 @@
             {% if app.session.has('access_token') %}
               <ul class="nav">
                 <li{% if app.request.get('_route') == 'home' %} class="active"{% endif %}><a href="/">Home</a></li>
-                <li{% if app.request.get('_route') == 'events' %} class="active"{% endif %}><a href="/events">Events</a></li>
+                <li{% if app.request.get('_route') == 'events_users' %} class="active"{% endif %}><a href="/events/users">Users Events</a></li>
+                <li{% if app.request.get('_route') == 'events_repos' %} class="active"{% endif %}><a href="/events/repositories">Repositories Events</a></li>
               </ul>
 
               <ul class="nav pull-right">
+                <li><a href="/cron">Update Now!</a></li>
                 <li><a href="/logout">Logout</a></li>
               </ul>
             {% endif %}
