@@ -2,4 +2,4 @@ composer.phar
 vendor
 config.yml
 data
-github-summary.db
+github-summary.sqlite
