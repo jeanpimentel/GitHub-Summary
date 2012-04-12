@@ -16,4 +16,4 @@ github.client_id: your_client_id
 github.client_secret: your_client_secret
 
 # Database dsn
-database.dsn: your_database_dsn
+database.dsn: sqlite:../your_database
