@@ -113,24 +113,28 @@ $app->get('/', function() use($app)
 ->middleware($mustBeLogged);
 
 
-$app->get('/events/users', function() use($app)
+$app->get('/events/users/{interval}', function($interval) use($app)
 {
     return $app['twig']->render('events.twig', array(
         'title' => 'Users Events',
-        'events' => $app['github']->getUsersEvents()
+        'interval' => $interval,
+        'events' => $app['github']->getUsersEvents($interval)
     ));
 })
+->value('interval', '1d')
 ->bind('events_users')
 ->middleware($mustBeLogged);
 
 
-$app->get('/events/repositories', function() use($app)
+$app->get('/events/repositories/{interval}', function($interval) use($app)
 {
     return $app['twig']->render('events.twig', array(
         'title' => 'Repositories Events',
-        'events' => $app['github']->getRepositoriesEvents()
+        'interval' => $interval,
+        'events' => $app['github']->getRepositoriesEvents($interval)
     ));
 })
+->value('interval', '1d')
 ->bind('events_repositories')
 ->middleware($mustBeLogged);
 
@@ -139,7 +143,7 @@ $app->get('/cron', function() use($app)
 {
     $user = $app['session']->get('user');
     $app['github']->update($user['login']);
-    return $app->redirect('/');
+    return $app->redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/');
 })
 ->bind('cron')
 ->middleware($mustBeLogged);

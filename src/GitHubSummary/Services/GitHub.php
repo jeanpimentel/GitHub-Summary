@@ -82,16 +82,38 @@ class GitHub
         return $data;
     }
 
-    public function getUsersEvents()
+    public function getUsersEvents($interval = '1d')
     {
-        $results = $this->mapper->event_user->fetchAll();
+        $interval = Sql::where(sprintf('created_at > %d', $this->calculateInterval($interval)));
+        $results = $this->mapper->event_user->fetchAll($interval);
         return ($results) ? $this->groupEvents($results) : false;
     }
-    
-    public function getRepositoriesEvents()
+
+    public function getRepositoriesEvents($interval = '1d')
     {
-        $results = $this->mapper->event_repository->fetchAll();
+        $interval = Sql::where(sprintf('created_at > %d', $this->calculateInterval($interval)));
+        $results = $this->mapper->event_repository()->fetchAll($interval);
         return ($results) ? $this->groupEvents($results) : false;
+    }
+
+    protected function calculateInterval($interval)
+    {
+        switch ($interval)
+        {
+            case '2d':
+                return time() - (60 * 60 * 48);
+            default:
+            case '1d':
+                return time() - (60 * 60 * 24);
+            case '12h':
+                return time() - (60 * 60 * 12);
+            case '6h':
+                return time() - (60 * 60 * 6);
+            case '3h':
+                return time() - (60 * 60 * 3);
+            case '1h':
+                return time() - (60 * 60 * 1);
+        }
     }
 
     protected function groupEvents(array $results)

@@ -5,6 +5,16 @@
 <h2>{{ title }}</h1>
 <hr />
 
+<b>Interval </b>
+<select class="span2" id="interval" rel="{{ app.request.get('_route') }}">
+    <option value="2d" {% if interval == '2d' %}selected="selected"{% endif %}>2 days ago</option>
+    <option value="1d" {% if interval == '1d' %}selected="selected"{% endif %}>1 day ago</option>
+    <option value="12h" {% if interval == '12h' %}selected="selected"{% endif %}>12 hours ago</option>
+    <option value="6h" {% if interval == '6h' %}selected="selected"{% endif %}>6 hours ago</option>
+    <option value="3h" {% if interval == '3h' %}selected="selected"{% endif %}>3 hours ago</option>
+    <option value="1h" {% if interval == '1h' %}selected="selected"{% endif %}>1 hour ago</option>
+</select>
+
 {% if events %}
     <ul class="unstyled">
     {% for actor, group in events %}
